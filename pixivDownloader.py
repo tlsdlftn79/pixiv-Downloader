@@ -8,7 +8,7 @@ from io import BytesIO
 # Pixiv API에 로그인
 def login_to_pixiv():
     api = AppPixivAPI()
-    api.auth(refresh_token="api키 입력")
+    api.auth(refresh_token="oBo7eBeRy6ebJ4f2r12waJsbOsTL7wgmRJsrMCoRHCY")
     return api
 
 # 이미지 다운로드 및 표시
@@ -22,6 +22,10 @@ def download_image(api, illust_id):
     else:  # 단일 이미지만 있는 경우
         images_url = [illust.meta_single_page.get('original_image_url', illust.image_urls.large)]
     
+    global panel  # panel을 전역 변수로 선언
+    if panel:  # 이미지를 표시하는 Label 위젯이 이미 존재한다면, 이를 삭제
+        panel.pack_forget()
+
     for idx, image_url in enumerate(images_url):
         # Referer 헤더 추가
         headers = {
@@ -39,8 +43,8 @@ def download_image(api, illust_id):
             
             # tkinter에서 이미지 표시 준비
             img_tk = ImageTk.PhotoImage(img)
-            panel = tk.Label(window, image=img_tk)
-            panel.image = img_tk
+            panel = tk.Label(window, image=img_tk)  # 새로운 Label 위젯 생성
+            panel.image = img_tk  # 참조를 유지하기 위해 이미지를 Label의 속성으로 할당
             panel.pack()
         else:
             print(f"이미지 {idx}를 다운로드하지 못했습니다. 상태 코드:", response.status_code)
@@ -60,6 +64,8 @@ def request_illust_id():
 # GUI 설정
 window = tk.Tk()
 window.geometry("800x600")
+
+panel = None  # panel을 전역 변수로 초기화
 
 api = login_to_pixiv()
 
