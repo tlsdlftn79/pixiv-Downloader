@@ -8,7 +8,7 @@ from io import BytesIO
 # Pixiv API에 로그인
 def login_to_pixiv():
     api = AppPixivAPI()
-    api.auth(refresh_token="oBo7eBeRy6ebJ4f2r12waJsbOsTL7wgmRJsrMCoRHCY")
+    api.auth(refresh_token="api 발급")
     return api
 
 # 이미지 다운로드 및 표시
