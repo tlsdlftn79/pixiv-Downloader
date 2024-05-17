@@ -8,7 +8,7 @@ from io import BytesIO
 # Pixiv API에 로그인
 def login_to_pixiv():
     api = AppPixivAPI()
-    api.auth(refresh_token="픽시브 api 토큰번호")
+    api.auth(refresh_token="Pixiv API 토큰번호")
     return api
 
 def show_image(idx, images_url):
@@ -24,11 +24,10 @@ def show_image(idx, images_url):
 
         if response.status_code == 200:
             img = Image.open(BytesIO(img_data))
+            img.save(f"{illust_id}_{idx}.png")  # 원본 이미지 저장
             
-            # 이미지 크기 조정
-            img = img.resize((400, 400), Image.Resampling.LANCZOS)
-            
-            img.save(f"{illust_id}_{idx}.png")
+            # 이미지 출력 크기 조절
+            img.thumbnail((400, 400))  # 예시로 400x400 크기로 조절합니다. 필요에 따라 조절하세요.
             img_tk = ImageTk.PhotoImage(img)
             panel.configure(image=img_tk)
             panel.image = img_tk
@@ -71,7 +70,7 @@ def request_illust_id():
 
 # GUI 설정
 window = tk.Tk()
-window.geometry("400x450")  # 창 크기 조정
+window.geometry("400x480")  # 창 크기 조정
 
 panel = tk.Label(window)  # panel을 전역 변수로 초기화
 panel.pack()
